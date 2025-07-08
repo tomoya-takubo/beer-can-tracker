@@ -1,0 +1,72 @@
+{
+  "name": "BeerCan Tracker - 缶ビール記録アプリ",
+  "short_name": "BeerCan Tracker",
+  "description": "缶ビール専用の飲酒記録管理アプリ。健康的な飲酒習慣をサポートします。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fef3c7",
+  "theme_color": "#d97706",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["health", "lifestyle", "productivity"],
+  "screenshots": [
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-wide.png", 
+      "sizes": "1024x593",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "缶ビール追加",
+      "short_name": "追加",
+      "description": "新しい缶ビールを記録する",
+      "url": "/?action=add",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "統計を見る",
+      "short_name": "統計",
+      "description": "飲酒統計を確認する",
+      "url": "/stats",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

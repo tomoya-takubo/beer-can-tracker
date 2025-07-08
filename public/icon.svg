@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#d97706" rx="80"/>
+  
+  <!-- Beer Can -->
+  <rect x="156" y="80" width="200" height="280" fill="#f59e0b" rx="20"/>
+  <rect x="156" y="80" width="200" height="40" fill="#fbbf24" rx="20"/>
+  
+  <!-- Beer Can Shadow -->
+  <rect x="176" y="100" width="160" height="240" fill="#d97706" rx="10"/>
+  
+  <!-- Label -->
+  <rect x="176" y="160" width="160" height="80" fill="#ffffff" rx="8"/>
+  
+  <!-- Beer Text -->
+  <text x="256" y="190" text-anchor="middle" fill="#d97706" font-family="Arial, sans-serif" font-size="24" font-weight="bold">🍺</text>
+  <text x="256" y="220" text-anchor="middle" fill="#d97706" font-family="Arial, sans-serif" font-size="16" font-weight="bold">BEER</text>
+  
+  <!-- Bottom -->
+  <ellipse cx="256" cy="360" rx="100" ry="20" fill="#d97706"/>
+  <ellipse cx="256" cy="365" rx="100" ry="15" fill="#92400e"/>
+  
+  <!-- Top -->
+  <ellipse cx="256" cy="80" rx="100" ry="20" fill="#fbbf24"/>
+  <rect x="236" y="60" width="40" height="30" fill="#e5e7eb" rx="5"/>
+  <rect x="241" y="50" width="30" height="20" fill="#d1d5db" rx="3"/>
+</svg>

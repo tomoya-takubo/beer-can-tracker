@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オフライン - BeerCan Tracker</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fed7aa 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #d97706;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        p {
+            color: #92400e;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .features {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #fef3c7;
+            border-radius: 10px;
+        }
+        
+        .features h3 {
+            color: #d97706;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .features ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #92400e;
+        }
+        
+        .features li {
+            margin-bottom: 8px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(217, 119, 6, 0.3);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🍺</div>
+        <h1>オフラインモード</h1>
+        <p>インターネット接続がありませんが、BeerCan Trackerは引き続きご利用いただけます。</p>
+        
+        <div class="features">
+            <h3>📱 オフラインでできること</h3>
+            <ul>
+                <li>過去の記録を確認</li>
+                <li>統計データの閲覧</li>
+                <li>キャッシュされたページの表示</li>
+                <li>アプリの基本機能</li>
+            </ul>
+        </div>
+        
+        <p>新しい記録の保存やデータ同期には、インターネット接続が必要です。</p>
+        
+        <button class="retry-btn" onclick="window.location.reload()">
+            🔄 再接続を試行
+        </button>
+        
+        <div class="footer">
+            接続が復旧すると、自動的に同期されます
+        </div>
+    </div>
+
+    <script>
+        // 接続状態の監視
+        window.addEventListener('online', () => {
+            console.log('オンラインに復帰しました');
+            // 自動的にリロードするかユーザーに通知
+            if (confirm('インターネット接続が復旧しました。ページを更新しますか？')) {
+                window.location.reload();
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('オフラインになりました');
+        });
+
+        // Service Worker からのメッセージを受信
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data && event.data.type === 'CACHE_UPDATED') {
+                    // キャッシュが更新されたらリロードを提案
+                    if (confirm('新しいバージョンが利用可能です。更新しますか？')) {
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
