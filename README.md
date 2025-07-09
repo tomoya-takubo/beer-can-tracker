@@ -1,6 +1,8 @@
 # 🍺 Beer Can Tracker
 
-缶ビール専用記録アプリ - 飲酒量を適切に管理するためのWebアプリケーション
+缶ビール専用記録アプリ - 飲酒量を適切に管理するためのWebアプリケーション  
+
+デモサイトはこちら(https://beer-can-tracker.vercel.app/)（お試し用アカウント: `test@example.com` / パスワード: `testpass123`）
 
 ## 🎯 概要
 
@@ -82,26 +84,8 @@ beer-can-tracker/
 └── package.json                   # パッケージ管理
 ```
 
-## 開発の開始方法
-
-### 1. 依存関係をインストール
-```bash
-npm install
-```
-
-### 2. 環境変数を設定
-`.env.local`ファイルを作成し、以下を設定：
-```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### 3. 開発サーバーを起動
-```bash
-npm run dev
-```
-
-### 4. ブラウザで http://localhost:3000 にアクセス
+## 完成までに要した期間
+約2.5日
 
 ## 🚀 使い方
 
@@ -134,6 +118,12 @@ npm run dev
 1. CSV形式でのデータエクスポート
 2. 他のデバイスからのインポート
 3. アカウント削除機能（データ完全削除）
+
+## イメージ
+
+<p align="center">
+  <img src="images/beercan-tracker.gif" alt="BeerCan Tracker" width="100%" />
+</p>
 
 ## データ管理について
 
@@ -223,4 +213,4 @@ npm run dev
 ---
 
 **Beer Can Tracker** - 健康的な飲酒習慣をサポートするモダンなWebアプリケーション  
-開発者: [あなたの名前] | 技術スタック: Next.js, TypeScript, Supabase, Tailwind CSS
+開発者: [Tomoya Takubo] （[tkb1003@gmail.com](mailto:tkb1003@gmail.com)）| 技術スタック: Next.js, TypeScript, Supabase, Tailwind CSS
