@@ -44,6 +44,13 @@ export default function LoginPage() {
             theme="light"
             providers={['google']}
             redirectTo={typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : '/auth/callback'}
+            onlyThirdPartyProviders={false}
+            magicLink={true}
+            view="sign_in"
+            showLinks={true}
+            additionalData={{
+              email_confirm: true,
+            }}
             localization={{
               variables: {
                 sign_in: {
@@ -73,6 +80,14 @@ export default function LoginPage() {
                   link_text: 'パスワードをお忘れですか？',
                   email_input_placeholder: 'メールアドレスを入力',
                 },
+                magic_link: {
+                  email_input_label: 'メールアドレス',
+                  button_label: 'マジックリンクを送信',
+                  loading_button_label: '送信中...',
+                  link_text: 'パスワードなしでログイン',
+                  email_input_placeholder: 'メールアドレスを入力',
+                  confirmation_text: 'ログイン用のマジックリンクを送信しました。',
+                },
               },
             }}
           />
@@ -80,7 +95,12 @@ export default function LoginPage() {
 
         {/* フッター */}
         <div className="text-center mt-6 text-amber-600 text-sm">
-          <p>アカウントを作成してデータを安全に保存</p>
+          <p className="mb-2">アカウントを作成してデータを安全に保存</p>
+          <div className="text-xs text-amber-500 space-y-1">
+            <p>• メール認証: 確認メール送信後ログイン可能</p>
+            <p>• マジックリンク: パスワード不要でログイン</p>
+            <p>• Google認証: 即座にログイン可能</p>
+          </div>
         </div>
       </div>
     </div>
