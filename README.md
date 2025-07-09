@@ -2,7 +2,13 @@
 
 缶ビール専用記録アプリ - 飲酒量を適切に管理するためのWebアプリケーション  
 
-デモサイトはこちら(https://beer-can-tracker.vercel.app/)（お試し用アカウント: `test@example.com` / パスワード: `testpass123`）
+デモサイトはこちら(https://beer-can-tracker.vercel.app/)  
+（お試し用アカウント: `test@example.com` / パスワード: `testpass123`）  
+
+<p align="center">
+  <img src="images/beercan-tracker.gif" alt="BeerCan Tracker" width="100%" />
+</p>
+
 
 ## 🎯 概要
 
@@ -118,12 +124,6 @@ beer-can-tracker/
 1. CSV形式でのデータエクスポート
 2. 他のデバイスからのインポート
 3. アカウント削除機能（データ完全削除）
-
-## イメージ
-
-<p align="center">
-  <img src="images/beercan-tracker.gif" alt="BeerCan Tracker" width="100%" />
-</p>
 
 ## データ管理について
 
