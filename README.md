@@ -177,19 +177,6 @@ beer-can-tracker/
 - CSV形式でのデータエクスポート・インポート機能
 - セキュアなデータ削除機能の実装
 
-## 🚀 デプロイメント
-
-このアプリケーションはVercelで簡単にデプロイできます：
-
-1. GitHubリポジトリをVercelに連携
-2. 環境変数を設定：
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   NEXT_PUBLIC_SITE_URL=your_production_url
-   ```
-3. 自動デプロイ完了
-
 ## 🎓 学習・開発のポイント
 
 ### このプロジェクトで学べること
