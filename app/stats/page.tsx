@@ -349,12 +349,12 @@ export default function StatsPage() {
                 return (
                   <>
                     <div className="border-l-2 border-b-2 border-amber-400">
-                      <div className="flex h-32 gap-1 px-2 relative">
+                      <div className="flex h-32 gap-1 px-2 relative overflow-x-auto">
                         {hourlyData.map((hourData, index) => {
                           const height = (hourData.amount / adjustedMaxAmount) * 128
                           
                           return (
-                            <div key={index} className="relative" style={{ width: 'calc((100% - 48px) / 24)' }}>
+                            <div key={index} className="relative flex-shrink-0" style={{ width: 'max(20px, calc((100vw - 120px) / 24))' }}>
                               <div 
                                 className="bg-gradient-to-t from-amber-500 to-amber-300 w-full rounded-t-lg transition-all duration-1000 ease-out hover:from-amber-600 hover:to-amber-400 cursor-pointer absolute bottom-0"
                                 style={{ height: `${height > 0 ? Math.max(height, 4) : 0}px` }}
@@ -364,14 +364,14 @@ export default function StatsPage() {
                           )
                         })}
                       </div>
-                      <div className="flex gap-1 px-2 mt-2">
+                      <div className="flex gap-1 px-2 mt-2 overflow-x-auto">
                         {hourlyData.map((hourData, index) => (
-                          <div key={index} className="text-center" style={{ width: 'calc((100% - 48px) / 24)' }}>
+                          <div key={index} className="text-center flex-shrink-0" style={{ width: 'max(24px, calc((100vw - 120px) / 24))' }}>
                             <div className="text-xs text-amber-700 font-medium">
-                              {index}
+                              {index % 2 === 0 ? index : ''}
                             </div>
                             <div className="text-xs font-bold text-amber-800">
-                              {hourData.amount > 0 ? `${hourData.amount}ml` : '-'}
+                              {hourData.amount > 0 ? (hourData.amount >= 100 ? `${Math.round(hourData.amount/100)}` : hourData.amount) : ''}
                             </div>
                           </div>
                         ))}
@@ -395,9 +395,9 @@ export default function StatsPage() {
         {/* カレンダー形式ヒートマップ */}
         <div className="bg-white p-8 rounded-xl shadow-xl border-2 border-amber-200 mb-8">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-semibold flex items-center text-amber-800">
-              <span className="text-2xl mr-3">📅</span>
-              飲酒ヒートマップ
+            <h3 className="text-lg sm:text-xl font-semibold flex items-center text-amber-800">
+              <span className="text-xl sm:text-2xl mr-2 sm:mr-3">📅</span>
+              <span className="whitespace-nowrap">飲酒ヒートマップ</span>
             </h3>
             <div className="flex items-center space-x-2">
               <button
@@ -425,7 +425,7 @@ export default function StatsPage() {
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-1 sm:gap-2">
             {(() => {
               const year = currentMonth.getFullYear()
               const month = currentMonth.getMonth()
@@ -472,7 +472,7 @@ export default function StatsPage() {
                 return (
                   <div 
                     key={index} 
-                    className={`${bgColor} p-2 rounded-lg text-center cursor-pointer transition-colors duration-300 hover:opacity-80 border border-amber-300 min-h-16`}
+                    className={`${bgColor} p-1 sm:p-2 rounded-lg text-center cursor-pointer transition-colors duration-300 hover:opacity-80 border border-amber-300 min-h-12 sm:min-h-16 flex flex-col justify-center`}
                     title={`${day.date}: ${day.amount}ml (${day.cans}缶)`}
                     onClick={() => {
                       setSelectedDate(day.date)
@@ -494,7 +494,7 @@ export default function StatsPage() {
                         : 'text-gray-700'
                     }`}>{day.weekday}</div>
                     <div className="text-sm font-bold text-gray-800">{day.day}</div>
-                    <div className="text-xs text-gray-600">{day.amount > 0 ? `${day.amount}ml` : ''}</div>
+                    <div className="text-xs text-gray-600 truncate">{day.amount > 0 ? (day.amount >= 1000 ? `${Math.round(day.amount/100)/10}k` : `${day.amount}`) : ''}</div>
                   </div>
                 )
               })
