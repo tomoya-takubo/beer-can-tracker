@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
@@ -8,6 +8,68 @@ import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
+  const [testEmail, setTestEmail] = useState('')
+  const [testPassword, setTestPassword] = useState('')
+
+  // 認証状態の変更を監視してデバッグ
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('=== Login Page: Auth Event ===')
+        console.log('Event:', event)
+        console.log('Session:', !!session)
+        console.log('User:', session?.user?.email || 'None')
+        console.log('User confirmed:', session?.user?.email_confirmed_at || 'Not confirmed')
+        
+        if (event === 'SIGNED_IN' && session) {
+          console.log('Login successful, redirecting to home...')
+          router.push('/')
+        } else if (event === 'SIGNED_OUT') {
+          console.log('User signed out')
+        }
+      }
+    )
+
+    return () => subscription.unsubscribe()
+  }, [router])
+
+  // エラーハンドリング
+  useEffect(() => {
+    const checkAuthError = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession()
+        if (error) {
+          console.error('Auth session error:', error)
+        }
+      } catch (err) {
+        console.error('Auth check error:', err)
+      }
+    }
+
+    checkAuthError()
+  }, [])
+
+  // 手動ログインテスト
+  const handleTestLogin = async () => {
+    console.log('=== Manual Login Test ===')
+    console.log('Email:', testEmail)
+    console.log('Password:', testPassword ? '[HIDDEN]' : 'None')
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: testEmail,
+        password: testPassword,
+      })
+      
+      if (error) {
+        console.error('Login error:', error)
+      } else {
+        console.log('Login success:', data)
+      }
+    } catch (err) {
+      console.error('Login exception:', err)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-100 flex items-center justify-center p-4">
@@ -51,6 +113,10 @@ export default function LoginPage() {
             additionalData={{
               email_confirm: true,
             }}
+            queryParams={{
+              access_type: 'offline',
+              prompt: 'consent',
+            }}
             localization={{
               variables: {
                 sign_in: {
@@ -91,6 +157,31 @@ export default function LoginPage() {
               },
             }}
           />
+        </div>
+
+        {/* デバッグ用テストフォーム */}
+        <div className="mt-4 bg-red-50 p-4 rounded-lg border border-red-200">
+          <h3 className="text-sm font-bold text-red-800 mb-2">デバッグ用テストログイン</h3>
+          <input
+            type="email"
+            placeholder="メールアドレス"
+            value={testEmail}
+            onChange={(e) => setTestEmail(e.target.value)}
+            className="w-full p-2 border rounded mb-2"
+          />
+          <input
+            type="password"
+            placeholder="パスワード"
+            value={testPassword}
+            onChange={(e) => setTestPassword(e.target.value)}
+            className="w-full p-2 border rounded mb-2"
+          />
+          <button
+            onClick={handleTestLogin}
+            className="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700"
+          >
+            手動ログインテスト
+          </button>
         </div>
 
         {/* フッター */}
