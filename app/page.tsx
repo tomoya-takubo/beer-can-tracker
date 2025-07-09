@@ -57,15 +57,15 @@ export default function Home() {
           {/* ヘッダー（レスポンシブ対応） */}
           <div className="mb-8">
             {/* デスクトップ版レイアウト */}
-            <div className="hidden sm:flex justify-between items-center">
-              <div className="text-center flex-1">
+            <div className="hidden sm:block relative">
+              <div className="text-center">
                 <h1 className="text-5xl font-bold text-amber-800 mb-4">🍺 BeerCan Tracker</h1>
                 <p className="text-xl text-amber-700 font-medium">缶ビール専用記録アプリ - 飲酒量を適切に管理</p>
                 <div className="mt-4 inline-block bg-amber-600 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg">
                   Alcohol Consumption Management System
                 </div>
               </div>
-              <div className="ml-8">
+              <div className="absolute top-0 right-0">
                 <div className="bg-white p-4 rounded-xl shadow-lg border border-amber-200">
                   <div className="text-sm text-amber-600 mb-2">
                     {user?.email}
