@@ -217,7 +217,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
               : totalAmount >= 500
               ? '⚠️ 適正量を超過しています（適正量: 500ml以下）'
               : totalAmount >= 250
-              ? '注意: 適度な飲酒量に近づいています'
+              ? '👌適正な飲酒量の範囲内です'
               : totalAmount >= 1
               ? '参考: 一日の適正な飲酒量は500ml以下です'
               : '今日はまだ飲酒していません'
