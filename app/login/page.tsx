@@ -43,7 +43,7 @@ export default function LoginPage() {
             }}
             theme="light"
             providers={['google']}
-            redirectTo={`${window.location.origin}/auth/callback`}
+            redirectTo={typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : '/auth/callback'}
             localization={{
               variables: {
                 sign_in: {
