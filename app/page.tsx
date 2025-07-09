@@ -54,30 +54,63 @@ export default function Home() {
     <AuthGuard>
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-100">
         <div className="container mx-auto px-4 py-8">
-          {/* ヘッダー（ログアウトボタン付き） */}
-          <div className="flex justify-between items-center mb-8">
-            <div className="text-center flex-1">
-              <h1 className="text-5xl font-bold text-amber-800 mb-4">🍺 BeerCan Tracker</h1>
-              <p className="text-xl text-amber-700 font-medium">缶ビール専用記録アプリ - 飲酒量を適切に管理</p>
-              <div className="mt-4 inline-block bg-amber-600 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg">
-                Alcohol Consumption Management System
+          {/* ヘッダー（レスポンシブ対応） */}
+          <div className="mb-8">
+            {/* デスクトップ版レイアウト */}
+            <div className="hidden sm:flex justify-between items-center">
+              <div className="text-center flex-1">
+                <h1 className="text-5xl font-bold text-amber-800 mb-4">🍺 BeerCan Tracker</h1>
+                <p className="text-xl text-amber-700 font-medium">缶ビール専用記録アプリ - 飲酒量を適切に管理</p>
+                <div className="mt-4 inline-block bg-amber-600 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg">
+                  Alcohol Consumption Management System
+                </div>
+              </div>
+              <div className="ml-8">
+                <div className="bg-white p-4 rounded-xl shadow-lg border border-amber-200">
+                  <div className="text-sm text-amber-600 mb-2">
+                    {user?.email}
+                  </div>
+                  <div className="space-y-2">
+                    <button
+                      onClick={signOut}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 text-sm w-full"
+                    >
+                      ログアウト
+                    </button>
+                    <button
+                      onClick={() => setShowDeleteModal(true)}
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm w-full"
+                    >
+                      アカウント削除
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="absolute top-4 right-4">
+            
+            {/* モバイル版レイアウト */}
+            <div className="sm:hidden">
+              <div className="text-center mb-6">
+                <h1 className="text-3xl font-bold text-amber-800 mb-4">🍺 BeerCan Tracker</h1>
+                <p className="text-lg text-amber-700 font-medium">缶ビール専用記録アプリ - 飲酒量を適切に管理</p>
+                <div className="mt-4 inline-block bg-amber-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
+                  Alcohol Consumption Management System
+                </div>
+              </div>
               <div className="bg-white p-4 rounded-xl shadow-lg border border-amber-200">
-                <div className="text-sm text-amber-600 mb-2">
+                <div className="text-sm text-amber-600 mb-3 text-center">
                   {user?.email}
                 </div>
-                <div className="space-y-2">
+                <div className="flex space-x-2">
                   <button
                     onClick={signOut}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 text-sm w-full"
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 text-sm flex-1"
                   >
                     ログアウト
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(true)}
-                    className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm w-full"
+                    className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-200 text-sm flex-1"
                   >
                     アカウント削除
                   </button>
