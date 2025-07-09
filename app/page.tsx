@@ -23,7 +23,14 @@ export default function Home() {
 
   useEffect(() => {
     const loadTodayRecords = async () => {
-      const today = new Date().toISOString().split('T')[0]
+      // 日本時間での今日の日付を取得
+      const now = new Date()
+      const jstDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+      const year = jstDate.getFullYear()
+      const month = String(jstDate.getMonth() + 1).padStart(2, '0')
+      const day = String(jstDate.getDate()).padStart(2, '0')
+      const today = `${year}-${month}-${day}`
+      
       const records = await supabaseStorageService.getRecordsByDate(today)
       setTodayRecords(records)
     }
@@ -292,7 +299,12 @@ export default function Home() {
                         const last7Days = Array.from({length: 7}, (_, i) => {
                           const date = new Date()
                           date.setDate(date.getDate() - (6 - i))
-                          const dateStr = date.toISOString().split('T')[0]
+                          // 日本時間での日付文字列を生成
+                          const jstDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+                          const year = jstDate.getFullYear()
+                          const month = String(jstDate.getMonth() + 1).padStart(2, '0')
+                          const day = String(jstDate.getDate()).padStart(2, '0')
+                          const dateStr = `${year}-${month}-${day}`
                           const dayRecords = allRecords.filter(r => r.date === dateStr)
                           const weekday = date.getDay()
                           return {
@@ -360,7 +372,12 @@ export default function Home() {
                         const last7Days = Array.from({length: 7}, (_, i) => {
                           const date = new Date()
                           date.setDate(date.getDate() - (6 - i))
-                          const dateStr = date.toISOString().split('T')[0]
+                          // 日本時間での日付文字列を生成
+                          const jstDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+                          const year = jstDate.getFullYear()
+                          const month = String(jstDate.getMonth() + 1).padStart(2, '0')
+                          const day = String(jstDate.getDate()).padStart(2, '0')
+                          const dateStr = `${year}-${month}-${day}`
                           const dayRecords = allRecords.filter(r => r.date === dateStr)
                           return {
                             amount: dayRecords.reduce((sum, r) => sum + r.amount, 0),

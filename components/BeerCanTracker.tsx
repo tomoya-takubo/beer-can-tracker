@@ -36,7 +36,14 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
       }> = []
       
       if (viewPeriod === 'today') {
-        const today = new Date().toISOString().split('T')[0]
+        // 日本時間での今日の日付を取得
+        const now = new Date()
+        const jstDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+        const year = jstDate.getFullYear()
+        const month = String(jstDate.getMonth() + 1).padStart(2, '0')
+        const day = String(jstDate.getDate()).padStart(2, '0')
+        const today = `${year}-${month}-${day}`
+        
         records = (await supabaseStorageService.getRecordsByDate(today)).map(record => ({
           ...record,
           notes: record.notes ?? ''
@@ -102,13 +109,24 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
     const amount = size === '350ml' ? 350 : 500
     const now = new Date()
     
+    // 日本時間で正確な日付と時刻を取得
+    const jstTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }))
+    const year = jstTime.getFullYear()
+    const month = String(jstTime.getMonth() + 1).padStart(2, '0')
+    const day = String(jstTime.getDate()).padStart(2, '0')
+    const hours = String(jstTime.getHours()).padStart(2, '0')
+    const minutes = String(jstTime.getMinutes()).padStart(2, '0')
+    
+    const dateString = `${year}-${month}-${day}`
+    const timeString = `${hours}:${minutes}`
+    
     const formData = {
       name: `ビール缶(${size})`,
       category: DrinkCategory.ALCOHOL,
       amount: amount,
       unit: 'ml',
-      date: now.toISOString().split('T')[0],
-      time: now.toTimeString().slice(0, 5),
+      date: dateString,
+      time: timeString,
       notes: ''
     }
     
