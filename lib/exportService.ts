@@ -211,8 +211,8 @@ export class ImportService {
             date: columns[5],
             time: columns[6],
             notes: columns[7] || '',
-            createdAt: new Date(),
-            updatedAt: new Date()
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
           })
         }
       }
