@@ -268,6 +268,9 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
             onClick={() => addBeer('350ml')}
           >
             <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2">{beerSettings.can350ml.name}</h3>
+            <div className="text-center text-amber-600 text-sm mb-2">
+              ¥{beerSettings.can350ml.price}
+            </div>
             <div className="flex justify-center flex-1 items-center">
               <Image 
                 src="/images/drink_beer_can_short.png" 
@@ -292,6 +295,9 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
             onClick={() => addBeer('500ml')}
           >
             <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2">{beerSettings.can500ml.name}</h3>
+            <div className="text-center text-amber-600 text-sm mb-2">
+              ¥{beerSettings.can500ml.price}
+            </div>
             <div className="flex justify-center flex-1 items-center">
               <Image 
                 src="/images/drink_beer_can_long.png" 
