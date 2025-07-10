@@ -23,7 +23,10 @@ interface BeerCan {
 export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: BeerCanTrackerProps) {
   const [todayBeers, setTodayBeers] = useState<BeerCan[]>([])
   const [totalCans, setTotalCans] = useState({ can350: 0, can500: 0 })
-  const [beerSettings, setBeerSettings] = useState({ can350ml: { name: '350ml缶ビール' }, can500ml: { name: '500ml缶ビール' } })
+  const [beerSettings, setBeerSettings] = useState({
+    can350ml: { name: '350ml缶ビール', price: 0, alcoholContent: 0 },
+    can500ml: { name: '500ml缶ビール', price: 0, alcoholContent: 0 }
+  })
 
   useEffect(() => {
     const loadSettings = async () => {
