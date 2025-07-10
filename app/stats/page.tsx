@@ -56,7 +56,7 @@ export default function StatsPage() {
       )
     }
     
-      const calculatedStats = beerStatsService.calculateBeerStats(filteredRecords)
+      const calculatedStats = await beerStatsService.calculateBeerStats(filteredRecords)
       setStats(calculatedStats)
       setLoading(false)
     }
@@ -719,13 +719,11 @@ export default function StatsPage() {
                     <div className="text-2xl font-bold text-amber-700">{stats?.can350Count}</div>
                     <div className="text-sm text-amber-600">350ml缶</div>
                     <div className="text-xs text-amber-600">({(stats?.can350Count || 0) * 350}ml)</div>
-                    <div className="text-xs text-green-600 font-semibold">¥{((stats?.can350Count || 0) * settingsService.getBeerCanSettings().can350ml.price).toLocaleString()}</div>
                   </div>
                   <div className="text-center p-3 bg-white rounded-lg border border-orange-200">
                     <div className="text-2xl font-bold text-orange-700">{stats?.can500Count}</div>
                     <div className="text-sm text-orange-600">500ml缶</div>
                     <div className="text-xs text-orange-600">({(stats?.can500Count || 0) * 500}ml)</div>
-                    <div className="text-xs text-green-600 font-semibold">¥{((stats?.can500Count || 0) * settingsService.getBeerCanSettings().can500ml.price).toLocaleString()}</div>
                   </div>
                 </div>
               </div>
@@ -775,9 +773,9 @@ export default function StatsPage() {
         <BeerCanSettingsModal
           isOpen={showSettingsModal}
           onClose={() => setShowSettingsModal(false)}
-          onSave={() => {
+          onSave={async () => {
             // 統計を再計算
-            const calculatedStats = beerStatsService.calculateBeerStats(filteredRecords)
+            const calculatedStats = await beerStatsService.calculateBeerStats(filteredRecords)
             setStats(calculatedStats)
           }}
         />

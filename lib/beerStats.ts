@@ -2,7 +2,7 @@ import { DrinkRecord, BeerStats, DrinkingPaceStats, BeerCanSettings } from '@/ty
 import { settingsService } from './settingsService'
 
 export const beerStatsService = {
-  calculateBeerStats: (records: DrinkRecord[]): BeerStats => {
+  calculateBeerStats: async (records: DrinkRecord[]): Promise<BeerStats> => {
     if (records.length === 0) {
       return {
         totalAmount: 0,
@@ -19,7 +19,7 @@ export const beerStatsService = {
     }
 
     // 設定値を取得
-    const settings = settingsService.getBeerCanSettings()
+    const settings = await settingsService.getBeerCanSettings()
 
     const can350Records = records.filter(record => record.amount === 350)
     const can500Records = records.filter(record => record.amount === 500)
@@ -48,7 +48,7 @@ export const beerStatsService = {
     const maxCansInDay = Math.max(...Object.values(dailyData).map(d => d.cans), 0)
 
     // 飲みきり時間統計を計算
-    const drinkingPaceStats = beerStatsService.calculateDrinkingPaceStats(records)
+    const drinkingPaceStats = await beerStatsService.calculateDrinkingPaceStats(records)
 
     return {
       totalAmount,
@@ -139,7 +139,7 @@ export const beerStatsService = {
     }
   },
 
-  calculateDrinkingPaceStats: (records: DrinkRecord[]): DrinkingPaceStats => {
+  calculateDrinkingPaceStats: async (records: DrinkRecord[]): Promise<DrinkingPaceStats> => {
     // 記録を時間順にソート
     const sortedRecords = records
       .map(record => ({

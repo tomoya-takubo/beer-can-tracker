@@ -26,13 +26,17 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
 
   useEffect(() => {
     if (isOpen) {
-      const currentSettings = settingsService.getBeerCanSettings()
-      setSettings(currentSettings)
+      const loadSettings = async () => {
+        const currentSettings = await settingsService.getBeerCanSettings()
+        setSettings(currentSettings)
+      }
+      loadSettings()
     }
   }, [isOpen])
 
-  const handleSave = () => {
-    if (settingsService.updateBeerCanSettings(settings)) {
+  const handleSave = async () => {
+    const success = await settingsService.updateBeerCanSettings(settings)
+    if (success) {
       onSave(settings)
       onClose()
     } else {
@@ -40,11 +44,15 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
     }
   }
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (confirm('設定をデフォルト値にリセットしますか？')) {
-      settingsService.resetToDefaults()
-      const defaultSettings = settingsService.getBeerCanSettings()
-      setSettings(defaultSettings)
+      const success = await settingsService.resetToDefaults()
+      if (success) {
+        const defaultSettings = await settingsService.getBeerCanSettings()
+        setSettings(defaultSettings)
+      } else {
+        alert('設定のリセットに失敗しました')
+      }
     }
   }
 

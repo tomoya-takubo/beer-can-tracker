@@ -22,6 +22,7 @@ export default function Home() {
   const [showExportModal, setShowExportModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [beerStats, setBeerStats] = useState<any>(null)
 
   useEffect(() => {
     const loadTodayRecords = async () => {
@@ -51,12 +52,18 @@ export default function Home() {
     const loadAllRecords = async () => {
       const records = await supabaseStorageService.getAllRecords()
       setAllRecords(records)
+      
+      // 統計を計算
+      if (records.length > 0) {
+        const stats = await beerStatsService.calculateBeerStats(records)
+        setBeerStats(stats)
+      } else {
+        setBeerStats(null)
+      }
     }
     
     loadAllRecords()
   }, [refreshKey])
-
-  const beerStats = allRecords.length > 0 ? beerStatsService.calculateBeerStats(allRecords) : null
   const todayCans = todayRecords.length
 
   return (
@@ -432,9 +439,12 @@ export default function Home() {
         <BeerCanSettingsModal
           isOpen={showSettingsModal}
           onClose={() => setShowSettingsModal(false)}
-          onSave={() => {
+          onSave={async () => {
             // 統計を再計算
-            setRefreshKey(prev => prev + 1)
+            if (allRecords.length > 0) {
+              const stats = await beerStatsService.calculateBeerStats(allRecords)
+              setBeerStats(stats)
+            }
           }}
         />
 

@@ -122,7 +122,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
     const timeString = `${hours}:${minutes}`
     
     // 設定から商品名を取得
-    const settings = settingsService.getBeerCanSettings()
+    const settings = await settingsService.getBeerCanSettings()
     const productName = size === '350ml' ? settings.can350ml.name : settings.can500ml.name
     
     const formData = {
