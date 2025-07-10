@@ -150,21 +150,49 @@ export const settingsService = {
     try {
       const user = await this.getAuthenticatedUser()
 
-      const { error } = await supabase
+      // 既存の設定があるかチェック
+      const { data: existingSettings } = await supabase
         .from('user_settings')
-        .upsert({
-          user_id: user.id,
-          can350ml_price: settings.beerCanSettings.can350ml.price,
-          can350ml_alcohol_content: settings.beerCanSettings.can350ml.alcoholContent,
-          can350ml_name: settings.beerCanSettings.can350ml.name,
-          can500ml_price: settings.beerCanSettings.can500ml.price,
-          can500ml_alcohol_content: settings.beerCanSettings.can500ml.alcoholContent,
-          can500ml_name: settings.beerCanSettings.can500ml.name
-        })
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle()
 
-      if (error) {
-        console.error('設定の保存に失敗しました:', error)
-        return false
+      if (existingSettings) {
+        // 更新
+        const { error } = await supabase
+          .from('user_settings')
+          .update({
+            can350ml_price: settings.beerCanSettings.can350ml.price,
+            can350ml_alcohol_content: settings.beerCanSettings.can350ml.alcoholContent,
+            can350ml_name: settings.beerCanSettings.can350ml.name,
+            can500ml_price: settings.beerCanSettings.can500ml.price,
+            can500ml_alcohol_content: settings.beerCanSettings.can500ml.alcoholContent,
+            can500ml_name: settings.beerCanSettings.can500ml.name
+          })
+          .eq('user_id', user.id)
+
+        if (error) {
+          console.error('設定の更新に失敗しました:', error)
+          return false
+        }
+      } else {
+        // 新規作成
+        const { error } = await supabase
+          .from('user_settings')
+          .insert([{
+            user_id: user.id,
+            can350ml_price: settings.beerCanSettings.can350ml.price,
+            can350ml_alcohol_content: settings.beerCanSettings.can350ml.alcoholContent,
+            can350ml_name: settings.beerCanSettings.can350ml.name,
+            can500ml_price: settings.beerCanSettings.can500ml.price,
+            can500ml_alcohol_content: settings.beerCanSettings.can500ml.alcoholContent,
+            can500ml_name: settings.beerCanSettings.can500ml.name
+          }])
+
+        if (error) {
+          console.error('設定の作成に失敗しました:', error)
+          return false
+        }
       }
 
       return true

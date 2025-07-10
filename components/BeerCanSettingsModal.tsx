@@ -35,12 +35,17 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
   }, [isOpen])
 
   const handleSave = async () => {
-    const success = await settingsService.updateBeerCanSettings(settings)
-    if (success) {
-      onSave(settings)
-      onClose()
-    } else {
-      alert('設定の保存に失敗しました')
+    try {
+      const success = await settingsService.updateBeerCanSettings(settings)
+      if (success) {
+        onSave(settings)
+        onClose()
+      } else {
+        alert('設定の保存に失敗しました。もう一度お試しください。')
+      }
+    } catch (error) {
+      console.error('設定保存中にエラーが発生しました:', error)
+      alert('設定の保存中にエラーが発生しました。ネットワーク接続を確認してください。')
     }
   }
 
