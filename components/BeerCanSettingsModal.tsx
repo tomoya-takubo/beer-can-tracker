@@ -158,7 +158,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <h2 className="text-xl font-bold text-amber-800 mb-6 flex items-center">
             <span className="text-2xl mr-3">⚙️</span>
@@ -184,7 +184,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                       ...prev,
                       can350ml: { ...prev.can350ml, name: e.target.value }
                     }))}
-                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${errors['can350ml.name'] ? 'border-red-500' : 'border-amber-300'}`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-base ${errors['can350ml.name'] ? 'border-red-500' : 'border-amber-300'}`}
                     placeholder="商品名を入力"
                   />
                   {errors['can350ml.name'] && (
@@ -207,7 +207,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                         }))
                       }
                     }}
-                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${errors['can350ml.price'] ? 'border-red-500' : 'border-amber-300'}`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-base ${errors['can350ml.price'] ? 'border-red-500' : 'border-amber-300'}`}
                     placeholder="価格を入力（例：204）"
                   />
                   {errors['can350ml.price'] && (
@@ -230,7 +230,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                         }))
                       }
                     }}
-                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${errors['can350ml.alcoholContent'] ? 'border-red-500' : 'border-amber-300'}`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-base ${errors['can350ml.alcoholContent'] ? 'border-red-500' : 'border-amber-300'}`}
                     placeholder="純アルコール量を入力（例：14.0）"
                   />
                   {errors['can350ml.alcoholContent'] && (
@@ -258,7 +258,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                       ...prev,
                       can500ml: { ...prev.can500ml, name: e.target.value }
                     }))}
-                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${errors['can500ml.name'] ? 'border-red-500' : 'border-orange-300'}`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base ${errors['can500ml.name'] ? 'border-red-500' : 'border-orange-300'}`}
                     placeholder="商品名を入力"
                   />
                   {errors['can500ml.name'] && (
@@ -281,7 +281,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                         }))
                       }
                     }}
-                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${errors['can500ml.price'] ? 'border-red-500' : 'border-orange-300'}`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base ${errors['can500ml.price'] ? 'border-red-500' : 'border-orange-300'}`}
                     placeholder="価格を入力（例：268）"
                   />
                   {errors['can500ml.price'] && (
@@ -304,7 +304,7 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                         }))
                       }
                     }}
-                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${errors['can500ml.alcoholContent'] ? 'border-red-500' : 'border-orange-300'}`}
+                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base ${errors['can500ml.alcoholContent'] ? 'border-red-500' : 'border-orange-300'}`}
                     placeholder="純アルコール量を入力（例：20.0）"
                   />
                   {errors['can500ml.alcoholContent'] && (

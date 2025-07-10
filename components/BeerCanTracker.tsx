@@ -287,7 +287,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange, refr
             <div className="text-center text-amber-700 text-xs sm:text-sm mb-2">
               タップして追加
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-amber-700">
+            <div className="text-xl sm:text-2xl font-bold text-amber-700 mt-2">
               {totalCans.can350}缶
             </div>
           </div>
@@ -314,7 +314,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange, refr
             <div className="text-center text-amber-700 text-xs sm:text-sm mb-2">
               タップして追加
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-amber-700">
+            <div className="text-xl sm:text-2xl font-bold text-amber-700 mt-2">
               {totalCans.can500}缶
             </div>
           </div>

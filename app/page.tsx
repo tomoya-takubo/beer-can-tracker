@@ -335,7 +335,7 @@ export default function Home() {
                         
                         return (
                           <>
-                            <div className="flex h-40 gap-2 px-2 relative">
+                            <div className="flex h-40 gap-1 sm:gap-2 px-2 relative">
                               {last7Days.map((day, index) => {
                                 const barColor = day.isWeekend 
                                   ? day.isSunday 
@@ -357,7 +357,7 @@ export default function Home() {
                                 )
                               })}
                             </div>
-                            <div className="flex gap-2 px-2 mt-2">
+                            <div className="flex gap-1 sm:gap-2 px-2 mt-2">
                               {last7Days.map((day, index) => (
                                 <div key={index} className="text-center" style={{ width: 'calc((100% - 48px) / 7)' }}>
                                   <div className={`text-xs font-medium ${
