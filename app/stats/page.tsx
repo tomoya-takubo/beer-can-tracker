@@ -5,7 +5,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { supabaseStorageService } from '@/lib/supabaseStorage'
 import { beerStatsService } from '@/lib/beerStats'
+import { settingsService } from '@/lib/settingsService'
 import { DrinkRecord, BeerStats } from '@/types/drink'
+import BeerCanSettingsModal from '@/components/BeerCanSettingsModal'
 
 export default function StatsPage() {
   const [records, setRecords] = useState<DrinkRecord[]>([])
@@ -19,6 +21,7 @@ export default function StatsPage() {
   const [showBeerCans, setShowBeerCans] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [showAllSessions, setShowAllSessions] = useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
 
   useEffect(() => {
     const loadRecords = async () => {
@@ -204,9 +207,17 @@ export default function StatsPage() {
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-amber-800 mb-2">🍺 缶ビール統計分析</h1>
             <p className="text-sm sm:text-base text-amber-700">あなたの缶ビール摂取パターンを詳細分析します</p>
           </div>
-          <Link href="/" className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-200 shadow-lg text-sm sm:text-base w-full sm:w-auto text-center">
-            ホームに戻る
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <button
+              onClick={() => setShowSettingsModal(true)}
+              className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-200 shadow-lg text-sm sm:text-base text-center"
+            >
+              ⚙️ 設定
+            </button>
+            <Link href="/" className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-200 shadow-lg text-sm sm:text-base text-center">
+              ホームに戻る
+            </Link>
+          </div>
         </div>
 
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg mb-6 sm:mb-8">
@@ -708,13 +719,13 @@ export default function StatsPage() {
                     <div className="text-2xl font-bold text-amber-700">{stats?.can350Count}</div>
                     <div className="text-sm text-amber-600">350ml缶</div>
                     <div className="text-xs text-amber-600">({(stats?.can350Count || 0) * 350}ml)</div>
-                    <div className="text-xs text-green-600 font-semibold">¥{((stats?.can350Count || 0) * 204).toLocaleString()}</div>
+                    <div className="text-xs text-green-600 font-semibold">¥{((stats?.can350Count || 0) * settingsService.getBeerCanSettings().can350ml.price).toLocaleString()}</div>
                   </div>
                   <div className="text-center p-3 bg-white rounded-lg border border-orange-200">
                     <div className="text-2xl font-bold text-orange-700">{stats?.can500Count}</div>
                     <div className="text-sm text-orange-600">500ml缶</div>
                     <div className="text-xs text-orange-600">({(stats?.can500Count || 0) * 500}ml)</div>
-                    <div className="text-xs text-green-600 font-semibold">¥{((stats?.can500Count || 0) * 268).toLocaleString()}</div>
+                    <div className="text-xs text-green-600 font-semibold">¥{((stats?.can500Count || 0) * settingsService.getBeerCanSettings().can500ml.price).toLocaleString()}</div>
                   </div>
                 </div>
               </div>
@@ -759,6 +770,17 @@ export default function StatsPage() {
             </div>
           </div>
         </div>
+        
+        {/* 設定モーダル */}
+        <BeerCanSettingsModal
+          isOpen={showSettingsModal}
+          onClose={() => setShowSettingsModal(false)}
+          onSave={() => {
+            // 統計を再計算
+            const calculatedStats = beerStatsService.calculateBeerStats(filteredRecords)
+            setStats(calculatedStats)
+          }}
+        />
       </div>
     </div>
   )

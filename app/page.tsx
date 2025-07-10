@@ -12,6 +12,7 @@ import { DrinkRecord, DrinkCategory, DrinkingGoals, GoalProgress as GoalProgress
 import { goalsService } from '@/lib/goalsService'
 import ExportImportModal from '@/components/ExportImportModal'
 import AccountDeletionModal from '@/components/AccountDeletionModal'
+import BeerCanSettingsModal from '@/components/BeerCanSettingsModal'
 
 export default function Home() {
   const { user, signOut } = useAuth()
@@ -20,6 +21,7 @@ export default function Home() {
   const [canViewPeriod, setCanViewPeriod] = useState<'today' | 'week' | 'month'>('today')
   const [showExportModal, setShowExportModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
 
   useEffect(() => {
     const loadTodayRecords = async () => {
@@ -395,7 +397,13 @@ export default function Home() {
                   </div>
                 </div>
             </div>
-            <div className="mt-auto">
+            <div className="mt-auto space-y-3">
+              <button
+                onClick={() => setShowSettingsModal(true)}
+                className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-6 py-3 rounded-xl hover:from-gray-600 hover:to-gray-700 block w-full text-center transition-all duration-200 font-bold shadow-lg"
+              >
+                ⚙️ 缶ビール設定
+              </button>
               <Link href="/stats" className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-purple-600 hover:to-purple-700 block text-center transition-all duration-200 font-bold shadow-lg">
                 📊 詳細分析を見る
               </Link>
@@ -418,6 +426,16 @@ export default function Home() {
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onDeleteComplete={() => window.location.href = '/login'}
+        />
+
+        {/* 設定モーダル */}
+        <BeerCanSettingsModal
+          isOpen={showSettingsModal}
+          onClose={() => setShowSettingsModal(false)}
+          onSave={() => {
+            // 統計を再計算
+            setRefreshKey(prev => prev + 1)
+          }}
         />
 
         </div>

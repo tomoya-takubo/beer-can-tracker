@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { DrinkCategory } from '@/types/drink'
 import { supabaseStorageService } from '@/lib/supabaseStorage'
+import { settingsService } from '@/lib/settingsService'
 
 interface BeerCanTrackerProps {
   onAdd: () => void
@@ -120,8 +121,12 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
     const dateString = `${year}-${month}-${day}`
     const timeString = `${hours}:${minutes}`
     
+    // 設定から商品名を取得
+    const settings = settingsService.getBeerCanSettings()
+    const productName = size === '350ml' ? settings.can350ml.name : settings.can500ml.name
+    
     const formData = {
-      name: `ビール缶(${size})`,
+      name: productName,
       category: DrinkCategory.ALCOHOL,
       amount: amount,
       unit: 'ml',

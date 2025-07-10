@@ -1,4 +1,5 @@
-import { DrinkRecord, BeerStats, DrinkingPaceStats } from '@/types/drink'
+import { DrinkRecord, BeerStats, DrinkingPaceStats, BeerCanSettings } from '@/types/drink'
+import { settingsService } from './settingsService'
 
 export const beerStatsService = {
   calculateBeerStats: (records: DrinkRecord[]): BeerStats => {
@@ -17,6 +18,9 @@ export const beerStatsService = {
       }
     }
 
+    // 設定値を取得
+    const settings = settingsService.getBeerCanSettings()
+
     const can350Records = records.filter(record => record.amount === 350)
     const can500Records = records.filter(record => record.amount === 500)
     
@@ -24,9 +28,8 @@ export const beerStatsService = {
     const can500Count = can500Records.length
     const totalCans = can350Count + can500Count
     const totalAmount = can350Count * 350 + can500Count * 500
-    const totalCost = can350Count * 204 + can500Count * 268
-    // 純アルコール量計算: 500ml=20g, 350ml=14g
-    const totalAlcohol = can350Count * 14 + can500Count * 20
+    const totalCost = can350Count * settings.can350ml.price + can500Count * settings.can500ml.price
+    const totalAlcohol = can350Count * settings.can350ml.alcoholContent + can500Count * settings.can500ml.alcoholContent
 
     // 日別集計
     const dailyData = records.reduce((acc, record) => {

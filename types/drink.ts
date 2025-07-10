@@ -133,3 +133,22 @@ export interface GoalProgress {
   daysInPeriod: number
   remainingDays: number
 }
+
+export interface BeerCanSettings {
+  can350ml: {
+    price: number // 円
+    alcoholContent: number // g
+    name: string
+  }
+  can500ml: {
+    price: number // 円
+    alcoholContent: number // g
+    name: string
+  }
+}
+
+export interface AppSettings {
+  beerCanSettings: BeerCanSettings
+  createdAt: Date
+  updatedAt: Date
+}
