@@ -10,6 +10,7 @@ interface BeerCanTrackerProps {
   onAdd: () => void
   viewPeriod: 'today' | 'week' | 'month'
   onPeriodChange: (period: 'today' | 'week' | 'month') => void
+  refreshKey?: number
 }
 
 interface BeerCan {
@@ -20,7 +21,7 @@ interface BeerCan {
   added: boolean
 }
 
-export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: BeerCanTrackerProps) {
+export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange, refreshKey }: BeerCanTrackerProps) {
   const [todayBeers, setTodayBeers] = useState<BeerCan[]>([])
   const [totalCans, setTotalCans] = useState({ can350: 0, can500: 0 })
   const [beerSettings, setBeerSettings] = useState({
@@ -34,7 +35,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
       setBeerSettings(settings)
     }
     loadSettings()
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     const loadRecords = async () => {

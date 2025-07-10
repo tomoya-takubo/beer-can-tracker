@@ -137,7 +137,12 @@ export default function Home() {
 
         {/* 缶ビール記録エリア */}
         <div className="mb-8">
-          <BeerCanTracker onAdd={handleAddRecord} viewPeriod={canViewPeriod} onPeriodChange={setCanViewPeriod} />
+          <BeerCanTracker 
+            onAdd={handleAddRecord} 
+            viewPeriod={canViewPeriod} 
+            onPeriodChange={setCanViewPeriod}
+            refreshKey={refreshKey}
+          />
         </div>
 
 
@@ -445,6 +450,8 @@ export default function Home() {
               const stats = await beerStatsService.calculateBeerStats(allRecords)
               setBeerStats(stats)
             }
+            // BeerCanTrackerの設定表示を更新
+            setRefreshKey(prev => prev + 1)
           }}
         />
 
