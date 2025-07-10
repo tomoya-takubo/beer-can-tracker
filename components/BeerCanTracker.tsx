@@ -23,6 +23,15 @@ interface BeerCan {
 export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: BeerCanTrackerProps) {
   const [todayBeers, setTodayBeers] = useState<BeerCan[]>([])
   const [totalCans, setTotalCans] = useState({ can350: 0, can500: 0 })
+  const [beerSettings, setBeerSettings] = useState({ can350ml: { name: '350ml缶ビール' }, can500ml: { name: '500ml缶ビール' } })
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      const settings = await settingsService.getBeerCanSettings()
+      setBeerSettings(settings)
+    }
+    loadSettings()
+  }, [])
 
   useEffect(() => {
     const loadRecords = async () => {
@@ -258,7 +267,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
             className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border-2 border-amber-300 hover:border-amber-500 active:scale-105 transition-all duration-200 cursor-pointer h-48 sm:h-56 lg:h-64 flex flex-col justify-between"
             onClick={() => addBeer('350ml')}
           >
-            <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2">350ml缶</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2">{beerSettings.can350ml.name}</h3>
             <div className="flex justify-center flex-1 items-center">
               <Image 
                 src="/images/drink_beer_can_short.png" 
@@ -282,7 +291,7 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
             className="bg-white p-4 sm:p-6 rounded-xl shadow-lg border-2 border-amber-300 hover:border-amber-500 active:scale-105 transition-all duration-200 cursor-pointer h-48 sm:h-56 lg:h-64 flex flex-col justify-between"
             onClick={() => addBeer('500ml')}
           >
-            <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2">500ml缶</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2">{beerSettings.can500ml.name}</h3>
             <div className="flex justify-center flex-1 items-center">
               <Image 
                 src="/images/drink_beer_can_long.png" 
