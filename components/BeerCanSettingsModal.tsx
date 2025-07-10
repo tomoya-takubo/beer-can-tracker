@@ -23,22 +23,102 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
       name: 'ビール缶(500ml)'
     }
   })
+  const [formData, setFormData] = useState({
+    can350ml: {
+      price: '',
+      alcoholContent: '',
+      name: ''
+    },
+    can500ml: {
+      price: '',
+      alcoholContent: '',
+      name: ''
+    }
+  })
+  const [errors, setErrors] = useState<{[key: string]: string}>({})
 
   useEffect(() => {
     if (isOpen) {
       const loadSettings = async () => {
         const currentSettings = await settingsService.getBeerCanSettings()
         setSettings(currentSettings)
+        setFormData({
+          can350ml: {
+            price: currentSettings.can350ml.price.toString(),
+            alcoholContent: currentSettings.can350ml.alcoholContent.toString(),
+            name: currentSettings.can350ml.name
+          },
+          can500ml: {
+            price: currentSettings.can500ml.price.toString(),
+            alcoholContent: currentSettings.can500ml.alcoholContent.toString(),
+            name: currentSettings.can500ml.name
+          }
+        })
+        setErrors({})
       }
       loadSettings()
     }
   }, [isOpen])
 
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {}
+    
+    // 350ml缶のバリデーション
+    if (!formData.can350ml.name.trim()) {
+      newErrors['can350ml.name'] = '商品名を入力してください'
+    }
+    if (!formData.can350ml.price || formData.can350ml.price.trim() === '') {
+      newErrors['can350ml.price'] = '価格を入力してください'
+    } else if (isNaN(parseInt(formData.can350ml.price)) || parseInt(formData.can350ml.price) <= 0) {
+      newErrors['can350ml.price'] = '有効な価格を入力してください'
+    }
+    if (!formData.can350ml.alcoholContent || formData.can350ml.alcoholContent.trim() === '') {
+      newErrors['can350ml.alcoholContent'] = '純アルコール量を入力してください'
+    } else if (isNaN(parseFloat(formData.can350ml.alcoholContent)) || parseFloat(formData.can350ml.alcoholContent) <= 0) {
+      newErrors['can350ml.alcoholContent'] = '有効な純アルコール量を入力してください'
+    }
+    
+    // 500ml缶のバリデーション
+    if (!formData.can500ml.name.trim()) {
+      newErrors['can500ml.name'] = '商品名を入力してください'
+    }
+    if (!formData.can500ml.price || formData.can500ml.price.trim() === '') {
+      newErrors['can500ml.price'] = '価格を入力してください'
+    } else if (isNaN(parseInt(formData.can500ml.price)) || parseInt(formData.can500ml.price) <= 0) {
+      newErrors['can500ml.price'] = '有効な価格を入力してください'
+    }
+    if (!formData.can500ml.alcoholContent || formData.can500ml.alcoholContent.trim() === '') {
+      newErrors['can500ml.alcoholContent'] = '純アルコール量を入力してください'
+    } else if (isNaN(parseFloat(formData.can500ml.alcoholContent)) || parseFloat(formData.can500ml.alcoholContent) <= 0) {
+      newErrors['can500ml.alcoholContent'] = '有効な純アルコール量を入力してください'
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
   const handleSave = async () => {
+    if (!validateForm()) {
+      return
+    }
+    
     try {
-      const success = await settingsService.updateBeerCanSettings(settings)
+      const settingsToSave: BeerCanSettings = {
+        can350ml: {
+          name: formData.can350ml.name.trim(),
+          price: parseInt(formData.can350ml.price),
+          alcoholContent: parseFloat(formData.can350ml.alcoholContent)
+        },
+        can500ml: {
+          name: formData.can500ml.name.trim(),
+          price: parseInt(formData.can500ml.price),
+          alcoholContent: parseFloat(formData.can500ml.alcoholContent)
+        }
+      }
+      
+      const success = await settingsService.updateBeerCanSettings(settingsToSave)
       if (success) {
-        onSave(settings)
+        onSave(settingsToSave)
         onClose()
       } else {
         alert('設定の保存に失敗しました。もう一度お試しください。')
@@ -55,6 +135,19 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
       if (success) {
         const defaultSettings = await settingsService.getBeerCanSettings()
         setSettings(defaultSettings)
+        setFormData({
+          can350ml: {
+            price: defaultSettings.can350ml.price.toString(),
+            alcoholContent: defaultSettings.can350ml.alcoholContent.toString(),
+            name: defaultSettings.can350ml.name
+          },
+          can500ml: {
+            price: defaultSettings.can500ml.price.toString(),
+            alcoholContent: defaultSettings.can500ml.alcoholContent.toString(),
+            name: defaultSettings.can500ml.name
+          }
+        })
+        setErrors({})
       } else {
         alert('設定のリセットに失敗しました')
       }
@@ -86,14 +179,17 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                   </label>
                   <input
                     type="text"
-                    value={settings.can350ml.name}
-                    onChange={(e) => setSettings(prev => ({
+                    value={formData.can350ml.name}
+                    onChange={(e) => setFormData(prev => ({
                       ...prev,
                       can350ml: { ...prev.can350ml, name: e.target.value }
                     }))}
-                    className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${errors['can350ml.name'] ? 'border-red-500' : 'border-amber-300'}`}
                     placeholder="商品名を入力"
                   />
+                  {errors['can350ml.name'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['can350ml.name']}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-amber-700 mb-1">
@@ -101,19 +197,22 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                   </label>
                   <input
                     type="text"
-                    value={settings.can350ml.price.toString()}
+                    value={formData.can350ml.price}
                     onChange={(e) => {
                       const value = e.target.value
                       if (value === '' || /^[0-9]+$/.test(value)) {
-                        setSettings(prev => ({
+                        setFormData(prev => ({
                           ...prev,
-                          can350ml: { ...prev.can350ml, price: value === '' ? 0 : parseInt(value) }
+                          can350ml: { ...prev.can350ml, price: value }
                         }))
                       }
                     }}
-                    className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                    placeholder="価格を入力"
+                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${errors['can350ml.price'] ? 'border-red-500' : 'border-amber-300'}`}
+                    placeholder="価格を入力（例：204）"
                   />
+                  {errors['can350ml.price'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['can350ml.price']}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-amber-700 mb-1">
@@ -121,19 +220,22 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                   </label>
                   <input
                     type="text"
-                    value={settings.can350ml.alcoholContent.toString()}
+                    value={formData.can350ml.alcoholContent}
                     onChange={(e) => {
                       const value = e.target.value
                       if (value === '' || /^[0-9]+\.?[0-9]*$/.test(value)) {
-                        setSettings(prev => ({
+                        setFormData(prev => ({
                           ...prev,
-                          can350ml: { ...prev.can350ml, alcoholContent: value === '' ? 0 : parseFloat(value) }
+                          can350ml: { ...prev.can350ml, alcoholContent: value }
                         }))
                       }
                     }}
-                    className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                    placeholder="純アルコール量を入力"
+                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent ${errors['can350ml.alcoholContent'] ? 'border-red-500' : 'border-amber-300'}`}
+                    placeholder="純アルコール量を入力（例：14.0）"
                   />
+                  {errors['can350ml.alcoholContent'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['can350ml.alcoholContent']}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -151,14 +253,17 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                   </label>
                   <input
                     type="text"
-                    value={settings.can500ml.name}
-                    onChange={(e) => setSettings(prev => ({
+                    value={formData.can500ml.name}
+                    onChange={(e) => setFormData(prev => ({
                       ...prev,
                       can500ml: { ...prev.can500ml, name: e.target.value }
                     }))}
-                    className="w-full p-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${errors['can500ml.name'] ? 'border-red-500' : 'border-orange-300'}`}
                     placeholder="商品名を入力"
                   />
+                  {errors['can500ml.name'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['can500ml.name']}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-orange-700 mb-1">
@@ -166,19 +271,22 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                   </label>
                   <input
                     type="text"
-                    value={settings.can500ml.price.toString()}
+                    value={formData.can500ml.price}
                     onChange={(e) => {
                       const value = e.target.value
                       if (value === '' || /^[0-9]+$/.test(value)) {
-                        setSettings(prev => ({
+                        setFormData(prev => ({
                           ...prev,
-                          can500ml: { ...prev.can500ml, price: value === '' ? 0 : parseInt(value) }
+                          can500ml: { ...prev.can500ml, price: value }
                         }))
                       }
                     }}
-                    className="w-full p-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    placeholder="価格を入力"
+                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${errors['can500ml.price'] ? 'border-red-500' : 'border-orange-300'}`}
+                    placeholder="価格を入力（例：268）"
                   />
+                  {errors['can500ml.price'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['can500ml.price']}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-orange-700 mb-1">
@@ -186,19 +294,22 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                   </label>
                   <input
                     type="text"
-                    value={settings.can500ml.alcoholContent.toString()}
+                    value={formData.can500ml.alcoholContent}
                     onChange={(e) => {
                       const value = e.target.value
                       if (value === '' || /^[0-9]+\.?[0-9]*$/.test(value)) {
-                        setSettings(prev => ({
+                        setFormData(prev => ({
                           ...prev,
-                          can500ml: { ...prev.can500ml, alcoholContent: value === '' ? 0 : parseFloat(value) }
+                          can500ml: { ...prev.can500ml, alcoholContent: value }
                         }))
                       }
                     }}
-                    className="w-full p-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    placeholder="純アルコール量を入力"
+                    className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${errors['can500ml.alcoholContent'] ? 'border-red-500' : 'border-orange-300'}`}
+                    placeholder="純アルコール量を入力（例：20.0）"
                   />
+                  {errors['can500ml.alcoholContent'] && (
+                    <p className="text-red-500 text-sm mt-1">{errors['can500ml.alcoholContent']}</p>
+                  )}
                 </div>
               </div>
             </div>
