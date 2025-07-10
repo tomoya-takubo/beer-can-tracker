@@ -62,7 +62,19 @@ export default function RecordsPage() {
     })
   }
 
-  const beerStats = records.length > 0 ? beerStatsService.calculateBeerStats(records) : null
+  const [beerStats, setBeerStats] = useState<any>(null)
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (records.length > 0) {
+        const stats = await beerStatsService.calculateBeerStats(records)
+        setBeerStats(stats)
+      } else {
+        setBeerStats(null)
+      }
+    }
+    fetchStats()
+  }, [records])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-100">
