@@ -9,6 +9,8 @@ export interface DrinkRecordInput {
   date: string
   time: string
   notes?: string
+  price?: number
+  alcohol_content?: number
 }
 
 export class SupabaseStorageService {
@@ -44,7 +46,9 @@ export class SupabaseStorageService {
             unit: data.unit,
             date: data.date,
             time: data.time,
-            notes: data.notes || ''
+            notes: data.notes || '',
+            price: data.price,
+            alcohol_content: data.alcohol_content
           }
         ])
         .select()
@@ -64,6 +68,8 @@ export class SupabaseStorageService {
         date: record.date,
         time: record.time,
         notes: record.notes || '',
+        price: record.price,
+        alcohol_content: record.alcohol_content,
         createdAt: record.createdAt ?? record.created_at ?? '',
         updatedAt: record.updatedAt ?? record.updated_at ?? ''
       }
@@ -99,6 +105,8 @@ export class SupabaseStorageService {
         date: record.date,
         time: record.time,
         notes: record.notes || '',
+        price: record.price,
+        alcohol_content: record.alcohol_content,
         createdAt: record.createdAt ?? record.created_at ?? '',
         updatedAt: record.updatedAt ?? record.updated_at ?? ''
       }))
@@ -134,6 +142,8 @@ export class SupabaseStorageService {
         date: record.date,
         time: record.time,
         notes: record.notes || '',
+        price: record.price,
+        alcohol_content: record.alcohol_content,
         createdAt: record.createdAt ?? record.created_at ?? '',
         updatedAt: record.updatedAt ?? record.updated_at ?? ''
       }))
@@ -158,6 +168,8 @@ export class SupabaseStorageService {
           date: data.date,
           time: data.time,
           notes: data.notes || '',
+          price: data.price,
+          alcohol_content: data.alcohol_content,
           updated_at: new Date().toISOString()
         })
         .eq('id', id)
@@ -179,6 +191,8 @@ export class SupabaseStorageService {
         date: record.date,
         time: record.time,
         notes: record.notes || '',
+        price: record.price,
+        alcohol_content: record.alcohol_content,
         createdAt: record.createdAt ?? record.created_at ?? '',
         updatedAt: record.updatedAt ?? record.updated_at ?? ''
       }

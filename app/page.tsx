@@ -156,7 +156,7 @@ export default function Home() {
                   const dateB = new Date(`${b.date}T${b.time}`)
                   return dateB.getTime() - dateA.getTime()
                 })
-                .slice(0, 10)
+                .slice(0, 11)
                 .map((record, index) => (
                 <div key={record.id} className={`flex items-center p-3 rounded-xl border-2 ${
                   record.amount === 350 

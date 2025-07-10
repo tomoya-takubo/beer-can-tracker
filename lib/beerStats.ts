@@ -18,8 +18,8 @@ export const beerStatsService = {
       }
     }
 
-    // 設定値を取得
-    const settings = await settingsService.getBeerCanSettings()
+    // デフォルト設定値（既存レコードでprice/alcohol_contentがnullの場合用）
+    const defaultSettings = await settingsService.getBeerCanSettings()
 
     const can350Records = records.filter(record => record.amount === 350)
     const can500Records = records.filter(record => record.amount === 500)
@@ -28,8 +28,29 @@ export const beerStatsService = {
     const can500Count = can500Records.length
     const totalCans = can350Count + can500Count
     const totalAmount = can350Count * 350 + can500Count * 500
-    const totalCost = can350Count * settings.can350ml.price + can500Count * settings.can500ml.price
-    const totalAlcohol = can350Count * settings.can350ml.alcoholContent + can500Count * settings.can500ml.alcoholContent
+    
+    // 記録時の価格・純アルコール量を使用（なければデフォルト値）
+    const totalCost = records.reduce((sum, record) => {
+      if (record.price !== undefined && record.price !== null) {
+        return sum + record.price
+      }
+      // price が未設定の場合はデフォルト値を使用
+      const defaultPrice = record.amount === 350 
+        ? defaultSettings.can350ml.price 
+        : defaultSettings.can500ml.price
+      return sum + defaultPrice
+    }, 0)
+    
+    const totalAlcohol = records.reduce((sum, record) => {
+      if (record.alcohol_content !== undefined && record.alcohol_content !== null) {
+        return sum + record.alcohol_content
+      }
+      // alcohol_content が未設定の場合はデフォルト値を使用
+      const defaultAlcohol = record.amount === 350 
+        ? defaultSettings.can350ml.alcoholContent 
+        : defaultSettings.can500ml.alcoholContent
+      return sum + defaultAlcohol
+    }, 0)
 
     // 日別集計
     const dailyData = records.reduce((acc, record) => {

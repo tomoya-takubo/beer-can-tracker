@@ -121,18 +121,20 @@ export default function BeerCanTracker({ onAdd, viewPeriod, onPeriodChange }: Be
     const dateString = `${year}-${month}-${day}`
     const timeString = `${hours}:${minutes}`
     
-    // 設定から商品名を取得
+    // 設定から商品名、価格、純アルコール量を取得
     const settings = await settingsService.getBeerCanSettings()
-    const productName = size === '350ml' ? settings.can350ml.name : settings.can500ml.name
+    const canSettings = size === '350ml' ? settings.can350ml : settings.can500ml
     
     const formData = {
-      name: productName,
+      name: canSettings.name,
       category: DrinkCategory.ALCOHOL,
       amount: amount,
       unit: 'ml',
       date: dateString,
       time: timeString,
-      notes: ''
+      notes: '',
+      price: canSettings.price,
+      alcohol_content: canSettings.alcoholContent
     }
     
     const savedRecord = await supabaseStorageService.saveRecord(formData)

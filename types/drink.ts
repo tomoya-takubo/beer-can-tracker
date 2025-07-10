@@ -7,8 +7,10 @@ export interface DrinkRecord {
   date: string
   time: string
   notes?: string
-  createdAt: Date
-  updatedAt: Date
+  price?: number // 記録時の価格
+  alcohol_content?: number // 記録時の純アルコール量
+  createdAt: string
+  updatedAt: string
 }
 
 export enum DrinkCategory {
@@ -74,6 +76,8 @@ export interface DrinkFormData {
   date: string
   time: string
   notes?: string
+  price?: number // 記録時の価格
+  alcohol_content?: number // 記録時の純アルコール量
 }
 
 export interface DrinkingGoals {
