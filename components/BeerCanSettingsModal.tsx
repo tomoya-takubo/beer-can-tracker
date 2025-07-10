@@ -69,13 +69,13 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
     }
     if (!formData.can350ml.price || formData.can350ml.price.trim() === '') {
       newErrors['can350ml.price'] = '価格を入力してください'
-    } else if (isNaN(parseInt(formData.can350ml.price)) || parseInt(formData.can350ml.price) <= 0) {
-      newErrors['can350ml.price'] = '有効な価格を入力してください'
+    } else if (isNaN(parseInt(formData.can350ml.price)) || parseInt(formData.can350ml.price) < 0) {
+      newErrors['can350ml.price'] = '有効な価格を入力してください（0以上）'
     }
     if (!formData.can350ml.alcoholContent || formData.can350ml.alcoholContent.trim() === '') {
       newErrors['can350ml.alcoholContent'] = '純アルコール量を入力してください'
-    } else if (isNaN(parseFloat(formData.can350ml.alcoholContent)) || parseFloat(formData.can350ml.alcoholContent) <= 0) {
-      newErrors['can350ml.alcoholContent'] = '有効な純アルコール量を入力してください'
+    } else if (isNaN(parseFloat(formData.can350ml.alcoholContent)) || parseFloat(formData.can350ml.alcoholContent) < 0) {
+      newErrors['can350ml.alcoholContent'] = '有効な純アルコール量を入力してください（0以上）'
     }
     
     // 500ml缶のバリデーション
@@ -84,13 +84,13 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
     }
     if (!formData.can500ml.price || formData.can500ml.price.trim() === '') {
       newErrors['can500ml.price'] = '価格を入力してください'
-    } else if (isNaN(parseInt(formData.can500ml.price)) || parseInt(formData.can500ml.price) <= 0) {
-      newErrors['can500ml.price'] = '有効な価格を入力してください'
+    } else if (isNaN(parseInt(formData.can500ml.price)) || parseInt(formData.can500ml.price) < 0) {
+      newErrors['can500ml.price'] = '有効な価格を入力してください（0以上）'
     }
     if (!formData.can500ml.alcoholContent || formData.can500ml.alcoholContent.trim() === '') {
       newErrors['can500ml.alcoholContent'] = '純アルコール量を入力してください'
-    } else if (isNaN(parseFloat(formData.can500ml.alcoholContent)) || parseFloat(formData.can500ml.alcoholContent) <= 0) {
-      newErrors['can500ml.alcoholContent'] = '有効な純アルコール量を入力してください'
+    } else if (isNaN(parseFloat(formData.can500ml.alcoholContent)) || parseFloat(formData.can500ml.alcoholContent) < 0) {
+      newErrors['can500ml.alcoholContent'] = '有効な純アルコール量を入力してください（0以上）'
     }
     
     setErrors(newErrors)
