@@ -62,16 +62,16 @@ export default function StatsPage() {
   }, [selectedPeriod, startDate, endDate])
 
   const dailyData = records.length > 0 ? beerStatsService.getDailyConsumption(records) : []
-  const hourlyData = (() => {
+  // 時間別パターン用のフィルタリング済みレコードを取得
+  const getHourlyPatternRecords = () => {
     if (selectedDate) {
-      const dayRecords = records.filter(record => record.date === selectedDate)
-      return beerStatsService.getHourlyPattern(dayRecords)
+      // 特定の日が選択されている場合はその日のみ
+      return records.filter(record => record.date === selectedDate)
     }
     
-    // カスタム期間や期間選択を考慮してフィルターされたレコードを使用
-    let targetRecords = records
+    // 期間フィルターを適用
     if (startDate && endDate) {
-      targetRecords = records.filter(record => 
+      return records.filter(record => 
         record.date >= startDate && record.date <= endDate
       )
     } else if (selectedPeriod !== 'all') {
@@ -90,13 +90,32 @@ export default function StatsPage() {
           break
       }
       
-      targetRecords = records.filter(record => 
+      return records.filter(record => 
         new Date(record.date) >= cutoffDate
       )
     }
     
-    return beerStatsService.getHourlyPattern(targetRecords)
-  })()
+    return records
+  }
+  
+  const hourlyData = beerStatsService.getHourlyPattern(getHourlyPatternRecords())
+  
+  // 期間情報を取得する関数
+  const getPeriodDisplayText = () => {
+    if (selectedDate) {
+      return ` - ${selectedDate}`
+    }
+    if (startDate && endDate) {
+      return ` - ${startDate} 〜 ${endDate}`
+    }
+    switch (selectedPeriod) {
+      case 'week': return ' - 過去1週間'
+      case 'month': return ' - 過去1ヶ月'
+      case 'year': return ' - 過去1年'
+      case 'all': return ' - 全期間'
+      default: return ''
+    }
+  }
   const preference = records.length > 0 ? beerStatsService.getBeerTypePreference(records) : null
 
   // 期間の総日数を計算
@@ -200,7 +219,7 @@ export default function StatsPage() {
               <h3 className="text-lg font-medium mb-3 text-amber-800">プリセット期間</h3>
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => { setSelectedPeriod('all'); setStartDate(''); setEndDate(''); }}
+                  onClick={() => { setSelectedPeriod('all'); setStartDate(''); setEndDate(''); setSelectedDate(''); }}
                   className={`px-4 py-2 rounded-lg transition-all duration-200 ${
                     selectedPeriod === 'all' && !startDate && !endDate
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105' 
@@ -210,7 +229,7 @@ export default function StatsPage() {
                   すべて
                 </button>
                 <button
-                  onClick={() => { setSelectedPeriod('week'); setStartDate(''); setEndDate(''); }}
+                  onClick={() => { setSelectedPeriod('week'); setStartDate(''); setEndDate(''); setSelectedDate(''); }}
                   className={`px-4 py-2 rounded-lg transition-all duration-200 ${
                     selectedPeriod === 'week' && !startDate && !endDate
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105' 
@@ -220,7 +239,7 @@ export default function StatsPage() {
                   過去1週間
                 </button>
                 <button
-                  onClick={() => { setSelectedPeriod('month'); setStartDate(''); setEndDate(''); }}
+                  onClick={() => { setSelectedPeriod('month'); setStartDate(''); setEndDate(''); setSelectedDate(''); }}
                   className={`px-4 py-2 rounded-lg transition-all duration-200 ${
                     selectedPeriod === 'month' && !startDate && !endDate
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105' 
@@ -230,7 +249,7 @@ export default function StatsPage() {
                   過去1ヶ月
                 </button>
                 <button
-                  onClick={() => { setSelectedPeriod('year'); setStartDate(''); setEndDate(''); }}
+                  onClick={() => { setSelectedPeriod('year'); setStartDate(''); setEndDate(''); setSelectedDate(''); }}
                   className={`px-4 py-2 rounded-lg transition-all duration-200 ${
                     selectedPeriod === 'year' && !startDate && !endDate
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105' 
@@ -249,7 +268,7 @@ export default function StatsPage() {
                   <input
                     type="date"
                     value={startDate}
-                    onChange={(e) => { setStartDate(e.target.value); setSelectedPeriod('custom'); }}
+                    onChange={(e) => { setStartDate(e.target.value); setSelectedPeriod('custom'); setSelectedDate(''); }}
                     className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   />
                 </div>
@@ -258,7 +277,7 @@ export default function StatsPage() {
                   <input
                     type="date"
                     value={endDate}
-                    onChange={(e) => { setEndDate(e.target.value); setSelectedPeriod('custom'); }}
+                    onChange={(e) => { setEndDate(e.target.value); setSelectedPeriod('custom'); setSelectedDate(''); }}
                     className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   />
                 </div>
@@ -328,7 +347,7 @@ export default function StatsPage() {
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-12 gap-4">
               <h3 className="text-xl font-semibold flex items-center text-amber-800">
                 <span className="text-2xl mr-3">🕐</span>
-                時間別飲酒パターン{selectedDate && ` - ${selectedDate}`}
+                時間別飲酒パターン{getPeriodDisplayText()}
               </h3>
               {selectedDate && (
                 <button
