@@ -339,7 +339,7 @@ export default function StatsPage() {
                 </button>
               )}
             </div>
-            <div className="relative pl-16 mt-4">
+            <div className="relative">
               {(() => {
                 // maxAmountを一度だけ計算
                 const maxAmount = Math.max(...hourlyData.map(h => h.amount), 100)
@@ -347,45 +347,53 @@ export default function StatsPage() {
                 const adjustedMaxAmount = step * 4 // Y軸の最大値に合わせる
                 
                 return (
-                  <>
-                    <div className="border-l-2 border-b-2 border-amber-400">
-                      <div className="flex h-32 gap-1 px-2 relative overflow-x-auto">
-                        {hourlyData.map((hourData, index) => {
-                          const height = (hourData.amount / adjustedMaxAmount) * 128
-                          
-                          return (
-                            <div key={index} className="relative flex-shrink-0" style={{ width: 'max(20px, calc((100vw - 120px) / 24))' }}>
-                              <div 
-                                className="bg-gradient-to-t from-amber-500 to-amber-300 w-full rounded-t-lg transition-all duration-1000 ease-out hover:from-amber-600 hover:to-amber-400 cursor-pointer absolute bottom-0"
-                                style={{ height: `${height > 0 ? Math.max(height, 4) : 0}px` }}
-                                title={`${index}:00-${index}:59: ${hourData.cans} 缶 (${hourData.amount} ml)`}
-                              />
+                  <div className="overflow-x-auto">
+                    <div className="min-w-full" style={{ minWidth: '600px' }}>
+                      {/* Y軸メモリ */}
+                      <div className="flex">
+                        <div className="w-12 h-32 flex flex-col justify-between text-xs text-amber-600 pr-2">
+                          {[step * 4, step * 3, step * 2, step, 0].map(value => (
+                            <div key={value} className="text-right">
+                              {value}ml
                             </div>
-                          )
-                        })}
-                      </div>
-                      <div className="flex gap-1 px-2 mt-2 overflow-x-auto">
-                        {hourlyData.map((hourData, index) => (
-                          <div key={index} className="text-center flex-shrink-0" style={{ width: 'max(24px, calc((100vw - 120px) / 24))' }}>
-                            <div className="text-xs text-amber-700 font-medium">
-                              {index % 2 === 0 ? index : ''}
-                            </div>
-                            <div className="text-xs font-bold text-amber-800">
-                              {hourData.amount > 0 ? (hourData.amount >= 100 ? `${Math.round(hourData.amount/100)}` : hourData.amount) : ''}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    {/* Y軸メモリ */}
-                    <div className="absolute left-0 top-0 h-32 flex flex-col justify-between text-xs text-amber-600 pl-2">
-                      {[step * 4, step * 3, step * 2, step, 0].map(value => (
-                        <div key={value} className="text-right">
-                          {value}ml
+                          ))}
                         </div>
-                      ))}
+                        
+                        {/* グラフエリア */}
+                        <div className="flex-1 border-l-2 border-b-2 border-amber-400">
+                          <div className="flex h-32 relative">
+                            {hourlyData.map((hourData, index) => {
+                              const height = (hourData.amount / adjustedMaxAmount) * 128
+                              
+                              return (
+                                <div key={index} className="relative flex-1">
+                                  <div 
+                                    className="bg-gradient-to-t from-amber-500 to-amber-300 w-full rounded-t-lg transition-all duration-1000 ease-out hover:from-amber-600 hover:to-amber-400 cursor-pointer absolute bottom-0 mx-0.5"
+                                    style={{ height: `${height > 0 ? Math.max(height, 4) : 0}px` }}
+                                    title={`${index}:00-${index}:59: ${hourData.cans} 缶 (${hourData.amount} ml)`}
+                                  />
+                                </div>
+                              )
+                            })}
+                          </div>
+                          
+                          {/* X軸ラベル */}
+                          <div className="flex mt-2">
+                            {hourlyData.map((hourData, index) => (
+                              <div key={index} className="flex-1 text-center">
+                                <div className="text-xs text-amber-700 font-medium">
+                                  {index % 2 === 0 ? index : ''}
+                                </div>
+                                <div className="text-xs font-bold text-amber-800">
+                                  {hourData.amount > 0 ? `${hourData.amount}ml` : ''}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </>
+                  </div>
                 )
               })()}
             </div>
