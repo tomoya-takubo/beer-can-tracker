@@ -100,15 +100,19 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                     価格 (円)
                   </label>
                   <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={settings.can350ml.price}
-                    onChange={(e) => setSettings(prev => ({
-                      ...prev,
-                      can350ml: { ...prev.can350ml, price: parseInt(e.target.value) || 0 }
-                    }))}
+                    type="text"
+                    value={settings.can350ml.price.toString()}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === '' || /^[0-9]+$/.test(value)) {
+                        setSettings(prev => ({
+                          ...prev,
+                          can350ml: { ...prev.can350ml, price: value === '' ? 0 : parseInt(value) }
+                        }))
+                      }
+                    }}
                     className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    placeholder="価格を入力"
                   />
                 </div>
                 <div>
@@ -116,15 +120,19 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                     純アルコール量 (g)
                   </label>
                   <input
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    value={settings.can350ml.alcoholContent}
-                    onChange={(e) => setSettings(prev => ({
-                      ...prev,
-                      can350ml: { ...prev.can350ml, alcoholContent: parseFloat(e.target.value) || 0 }
-                    }))}
+                    type="text"
+                    value={settings.can350ml.alcoholContent.toString()}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === '' || /^[0-9]+\.?[0-9]*$/.test(value)) {
+                        setSettings(prev => ({
+                          ...prev,
+                          can350ml: { ...prev.can350ml, alcoholContent: value === '' ? 0 : parseFloat(value) }
+                        }))
+                      }
+                    }}
                     className="w-full p-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    placeholder="純アルコール量を入力"
                   />
                 </div>
               </div>
@@ -157,15 +165,19 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                     価格 (円)
                   </label>
                   <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={settings.can500ml.price}
-                    onChange={(e) => setSettings(prev => ({
-                      ...prev,
-                      can500ml: { ...prev.can500ml, price: parseInt(e.target.value) || 0 }
-                    }))}
+                    type="text"
+                    value={settings.can500ml.price.toString()}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === '' || /^[0-9]+$/.test(value)) {
+                        setSettings(prev => ({
+                          ...prev,
+                          can500ml: { ...prev.can500ml, price: value === '' ? 0 : parseInt(value) }
+                        }))
+                      }
+                    }}
                     className="w-full p-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    placeholder="価格を入力"
                   />
                 </div>
                 <div>
@@ -173,15 +185,19 @@ export default function BeerCanSettingsModal({ isOpen, onClose, onSave }: BeerCa
                     純アルコール量 (g)
                   </label>
                   <input
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    value={settings.can500ml.alcoholContent}
-                    onChange={(e) => setSettings(prev => ({
-                      ...prev,
-                      can500ml: { ...prev.can500ml, alcoholContent: parseFloat(e.target.value) || 0 }
-                    }))}
+                    type="text"
+                    value={settings.can500ml.alcoholContent.toString()}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      if (value === '' || /^[0-9]+\.?[0-9]*$/.test(value)) {
+                        setSettings(prev => ({
+                          ...prev,
+                          can500ml: { ...prev.can500ml, alcoholContent: value === '' ? 0 : parseFloat(value) }
+                        }))
+                      }
+                    }}
                     className="w-full p-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    placeholder="純アルコール量を入力"
                   />
                 </div>
               </div>
